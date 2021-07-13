@@ -7,7 +7,9 @@ router.prefix("/topics")
 
 router.post("/selectAdd",async (ctx)=>{
     let params=ctx.request.body
+
     await addSingleSel(params).then((result) => {
+ 
         if(result){
             ctx.body={
                 code:200,
@@ -21,6 +23,7 @@ router.post("/selectAdd",async (ctx)=>{
         }
 
     }).catch((err) => {
+  
         ctx.body={
             code:500,
             message:"添加出错"
@@ -35,8 +38,9 @@ router.get("/selectFind",async (ctx)=>{
     let where={Question:exp}
     SubjectName && (where['SubjectName']=SubjectName)
     TopicType && (where["TopicType"]=TopicType)
-    console.log(where);
+
     await findSingleSel(where).then((result) => {
+
         if(result.length>0){
             ctx.body={
                 code:200,
@@ -46,14 +50,16 @@ router.get("/selectFind",async (ctx)=>{
             }else{
                 ctx.body={
                     code:200,
-                    message:"未找到符合的结果"
+                    message:"未找到符合的结果",
+                    result
                 }
             }
         
     }).catch((err) => {
         ctx.body={
             code:500,
-            message:"搜索出错"
+            message:"搜索出错",
+            result
         }
     });
 })
@@ -123,6 +129,7 @@ router.post("/RightOrWrongAdd",async (ctx)=>{
         }
 
     }).catch((err) => {
+        console.log(err);
         ctx.body={
             code:500,
             message:"添加出错"
@@ -148,14 +155,16 @@ router.get("/RightOrWrongFind",async (ctx)=>{
             }else{
                 ctx.body={
                     code:200,
-                    message:"未找到符合的结果"
+                    message:"未找到符合的结果",
+                    result
                 }
             }
         
     }).catch((err) => {
         ctx.body={
             code:500,
-            message:"搜索出错"
+            message:"搜索出错",
+            result
         }
     });
 })
@@ -250,14 +259,16 @@ router.get("/FillingFind",async (ctx)=>{
             }else{
                 ctx.body={
                     code:200,
-                    message:"未找到符合的结果"
+                    message:"未找到符合的结果",
+                    result
                 }
             }
         
     }).catch((err) => {
         ctx.body={
             code:500,
-            message:"搜索出错"
+            message:"搜索出错",
+            result
         }
     });
 })
@@ -308,6 +319,20 @@ router.post("/FillingUpdate",async (ctx)=>{
         }
     });
     
+})
+
+
+router.get("/getTopics",async (ctx)=>{
+    const {Question,SubjectName,TopicType}=ctx.query  //获取选项
+    console.log(Question,SubjectName,TopicType);
+    let exp= findEpx(Question,4) 
+    let where={Question:exp}
+    SubjectName && (where['SubjectName']=SubjectName)
+    TopicType && (where["TopicType"]=TopicType)
+
+
+
+  
 })
 
 module.exports=router
